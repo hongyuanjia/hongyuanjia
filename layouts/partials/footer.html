@@ -1,6 +1,7 @@
   <footer class = "footer">
   {{ partial "foot_custom.html" . }}
   {{ partial "footer_highlightjs" . }}
+  <hr>
   <ul class="footer-links">
     {{ with .OutputFormats.Get "RSS" }}
     <li><a href="{{ .RelPermalink }}" type="application/rss+xml" target="_blank"><i class="fa fa-rss" aria-hidden="true" title="RSS feed"></i><span class="sr-only">RSS feed</span></a></li>
