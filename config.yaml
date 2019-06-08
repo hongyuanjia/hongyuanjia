@@ -15,7 +15,7 @@ footnotereturnlinkcontents: "↩"
 permalinks:
   cn: "/cn/:year/:month/:slug/"
   en: "/en/:year/:month/:slug/"
-    
+
 menu:
   main:
     - name: "About"
@@ -62,12 +62,9 @@ menu:
     - name: "English"
       url: "/en/"
       weight: 4
-    
+
 params:
   description: "A Blog of Hongyuan Jia; 贾洪愿的个人网站"
-  disqusURL: "https://weibinqu.xyz"
-  github: "https://github.com/hongyuanjia"
-  email: "qubinhan@gmail.com"
   footer: "&copy; [Hongyuan Jia](https://hongyuanjia.name) 2019 | [Github](https://github.com/hongyuanjia) | [Twitter](https://twitter.com/jiahony)"
 
   highlightjsVersion: "9.12.0"
@@ -75,14 +72,10 @@ params:
   highlightjsLang: ["r", "yaml", "tex"]
   highlightjsTheme: "github"
 
-  social:
-    twitter: "jiahony"
-    github: "hongyuanjia"
-
   author:
     en: "Hongyuan Jia"
     cn: "贾洪愿"
-    
+
   lang:
     edit:
       en: "Suggest an edit of this page"
