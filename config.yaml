@@ -1,6 +1,6 @@
 baseurl: "https://hongyuanjia.me"
 languageCode: "en-us"
-title: "Hongyuan Jia| 贾洪愿"
+title: "Hongyuan Jia|贾洪愿"
 theme: "hugo-ivy"
 canonifyurls: true
 relativeurls: true
@@ -68,7 +68,7 @@ menu:
       weight: 5
 
 params:
-  description: "A Blog of Hongyuan Jia; 贾洪愿的个人网站"
+  description: "A Blog of Hongyuan Jia"
   footer: "&copy; [Hongyuan Jia](https://hongyuanjia.name) 2019 | [Github](https://github.com/hongyuanjia) | [Twitter](https://twitter.com/jiahony)"
 
   highlightjsVersion: "9.12.0"
