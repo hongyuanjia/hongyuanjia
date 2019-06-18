@@ -1,0 +1,102 @@
+---
+title: Extract HVAC diagrams of all EnergyPlus example files
+author: Hongyuan Jia
+date: '2019-06-18'
+slug: extract-hvac-diagrams
+categories:
+  - tech
+tags:
+  - eplusr
+  - energyplus
+  - R
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Motivation
+
+I am wondering if in EnergyPlus, it is possible to directly connect
+`Coil:Heating:Electric` and other coils with air terminal units. To achieve, I
+tried to extract HVAC diagrams of all EnergyPlus example files to see if there
+is any example demonstrating this.
+
+```{r}
+library(eplusr)
+eplusr_option(verbose_info = FALSE)
+# for converting svg to PDF
+library(rsvg)
+```
+
+# Process
+
+Get paths of all EnergyPlus v9.0 example files.
+
+```{r}
+paths_idf <- list.files(file.path(eplus_config(9.0)$dir, "ExampleFiles"),
+    pattern = "\\.idf", full.names = TRUE, ignore.case = TRUE)
+```
+
+There are 584 example IDF files in total. Next step is to read all example
+files.
+
+```{r}
+all_idfs <- lapply(paths_idf, read_idf)
+```
+
+Here we only care about models that contains coils and also air distribution
+units.
+
+```{r}
+is_target <- vapply(all_idfs, function (idf) all(idf$is_valid_group(c("Coils", "Zone HVAC Air Loop Terminal Units"))), TRUE)
+idfs <- all_idfs[is_target]
+```
+
+After filtering, there are 382 models left. Running all these models may take
+years. In order to speed up, here only run every model for 1 day.
+
+```{r}
+idfs <- lapply(idfs,
+    function (idf) {
+        # remove original run period
+        idf$RunPeriod <- NULL
+
+        # add new run period
+        idf$add(RunPeriod = list("Jan1", 1, 1, NULL, 1, 1, NULL))
+
+        # save all models to temporary directory
+        idf$save(file.path(tempdir(), basename(idf$path())), overwrite = TRUE)
+
+        idf
+    }
+)
+```
+
+After saving all modified models, it is easy to run all of them using
+`eplusr::run_multi()` in parallel.
+
+```{r, results = "hide"}
+jobs <- run_multi(
+    model = vapply(idfs, function (idf) idf$path(), character(1)),
+    weather = file.path(eplus_config(9.0)$dir, "WeatherData/USA_CO_Golden-NREL.724666_TMY3.epw"),
+    NULL
+)
+```
+
+Here we exclude all simulations that failed to complete and use
+`eplusr:::hvac_diagram()` to call `HAVC-Diagram` post-processor to draw the
+`.svg` HVAC diagrams, and in the end, call `rsvg::rsvg_pdf()` to convert `.svg`
+file to `.pdf` file.
+
+```{r, results = "hide"}
+jobs[, by = index,
+    {
+        bnd <- paste0(tools::file_path_sans_ext(idf), ".bnd")
+        if (file.exists(bnd)) {
+            svg <- eplusr:::hvac_diagram(energyplus, bnd)
+            rsvg::rsvg_pdf(svg, paste0(tools::file_path_sans_ext(svg), ".pdf"))
+        }
+    }
+]
+```

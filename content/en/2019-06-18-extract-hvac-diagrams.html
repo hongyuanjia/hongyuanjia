@@ -1,0 +1,75 @@
+---
+title: Extract HVAC diagrams of all EnergyPlus example files
+author: Hongyuan Jia
+date: '2019-06-18'
+slug: extract-hvac-diagrams
+categories:
+  - tech
+tags:
+  - eplusr
+  - energyplus
+  - R
+---
+
+
+
+<div id="motivation" class="section level1">
+<h1>Motivation</h1>
+<p>I am wondering if in EnergyPlus, it is possible to directly connect
+<code>Coil:Heating:Electric</code> and other coils with air terminal units. To achieve, I
+tried to extract HVAC diagrams of all EnergyPlus example files to see if there
+is any example demonstrating this.</p>
+<pre class="r"><code>library(eplusr)
+eplusr_option(verbose_info = FALSE)
+# for converting svg to PDF
+library(rsvg)</code></pre>
+</div>
+<div id="process" class="section level1">
+<h1>Process</h1>
+<p>Get paths of all EnergyPlus v9.0 example files.</p>
+<pre class="r"><code>paths_idf &lt;- list.files(file.path(eplus_config(9.0)$dir, &quot;ExampleFiles&quot;),
+    pattern = &quot;\\.idf&quot;, full.names = TRUE, ignore.case = TRUE)</code></pre>
+<p>There are 584 example IDF files in total. Next step is to read all example
+files.</p>
+<pre class="r"><code>all_idfs &lt;- lapply(paths_idf, read_idf)</code></pre>
+<p>Here we only care about models that contains coils and also air distribution
+units.</p>
+<pre class="r"><code>is_target &lt;- vapply(all_idfs, function (idf) all(idf$is_valid_group(c(&quot;Coils&quot;, &quot;Zone HVAC Air Loop Terminal Units&quot;))), TRUE)
+idfs &lt;- all_idfs[is_target]</code></pre>
+<p>After filtering, there are 382 models left. Running all these models may take
+years. In order to speed up, here only run every model for 1 day.</p>
+<pre class="r"><code>idfs &lt;- lapply(idfs,
+    function (idf) {
+        # remove original run period
+        idf$RunPeriod &lt;- NULL
+
+        # add new run period
+        idf$add(RunPeriod = list(&quot;Jan1&quot;, 1, 1, NULL, 1, 1, NULL))
+
+        # save all models to temporary directory
+        idf$save(file.path(tempdir(), basename(idf$path())), overwrite = TRUE)
+
+        idf
+    }
+)</code></pre>
+<p>After saving all modified models, it is easy to run all of them using
+<code>eplusr::run_multi()</code> in parallel.</p>
+<pre class="r"><code>jobs &lt;- run_multi(
+    model = vapply(idfs, function (idf) idf$path(), character(1)),
+    weather = file.path(eplus_config(9.0)$dir, &quot;WeatherData/USA_CO_Golden-NREL.724666_TMY3.epw&quot;),
+    NULL
+)</code></pre>
+<p>Here we exclude all simulations that failed to complete and use
+<code>eplusr:::hvac_diagram()</code> to call <code>HAVC-Diagram</code> post-processor to draw the
+<code>.svg</code> HVAC diagrams, and in the end, call <code>rsvg::rsvg_pdf()</code> to convert <code>.svg</code>
+file to <code>.pdf</code> file.</p>
+<pre class="r"><code>jobs[, by = index,
+    {
+        bnd &lt;- paste0(tools::file_path_sans_ext(idf), &quot;.bnd&quot;)
+        if (file.exists(bnd)) {
+            svg &lt;- eplusr:::hvac_diagram(energyplus, bnd)
+            rsvg::rsvg_pdf(svg, paste0(tools::file_path_sans_ext(svg), &quot;.pdf&quot;))
+        }
+    }
+]</code></pre>
+</div>
