@@ -22,7 +22,6 @@ body {
   padding: 2em 40px;
   hyphens: auto;
   border-left: none;
-  width: 900px;
 }
 .menu li:not([class]) a, a:hover, .copyright a {
   border-bottom: none;
@@ -71,7 +70,7 @@ pre .nohighlight {
   margin: 2em auto 1em;
 }
 .masthead img {
-  max-width: 120px;
+  max-width: 80px;
 }
 img[src$="#border"] {
   border: 1px solid #ddd;
@@ -118,7 +117,6 @@ img[src$="#border"] {
   }
   .masthead h1 {
     margin-bottom: 10px;
-    font-size: 35px;
   }
   .masthead .menu ul {
     text-align: center;
@@ -150,7 +148,7 @@ img[src$="#border"] {
     display: none;
   }
   body {
-    max-width: 900px;
+    max-width: 700px;
   }
   .main {
     margin-left: 0;
