@@ -1,0 +1,48 @@
+---
+title: Understanding node connections in EnergyPlus
+author: Hongyuan Jia
+date: '2019-06-14'
+slug: understanding-node-connections-in-energyplus
+categories:
+  - tech
+tags:
+  - energyplus
+  - eplusr
+---
+
+
+
+<div id="zone-hvac-design-objects" class="section level1">
+<h1>Zone HVAC Design Objects</h1>
+<ol style="list-style-type: decimal">
+<li>Set design specifications of outdoor air</li>
+<li>Set zone, system and plant sizing parameters</li>
+</ol>
+</div>
+<div id="zone-hvac-controls-and-thermostats" class="section level1">
+<h1>Zone HVAC Controls and Thermostats</h1>
+<ol style="list-style-type: decimal">
+<li>Set zone thermostats</li>
+</ol>
+</div>
+<div id="zone-hvac-forced-air-units" class="section level1">
+<h1>Zone HVAC Forced Air Units</h1>
+<ol style="list-style-type: decimal">
+<li>Zone HVAC components here should directly correct to zones and cannot connect
+to Zone HVAC Air Loop Terminal Units.</li>
+</ol>
+</div>
+<div id="zone-hvac-radiativeconvective-units" class="section level1">
+<h1>Zone HVAC Radiative/Convective Units</h1>
+<ol style="list-style-type: decimal">
+<li>Components here do not use normal zone thermostats but use their own schedule
+to set zone setpoints</li>
+</ol>
+</div>
+<div id="zone-hvac-air-loop-terminal-units" class="section level1">
+<h1>Zone HVAC Air Loop Terminal Units</h1>
+<ol style="list-style-type: decimal">
+<li>Components here are just used to distribute air flow to zones and can be used
+together with other coils.</li>
+</ol>
+</div>

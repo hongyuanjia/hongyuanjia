@@ -1,0 +1,35 @@
+---
+title: Understanding node connections in EnergyPlus
+author: Hongyuan Jia
+date: '2019-06-14'
+slug: understanding-node-connections-in-energyplus
+categories:
+  - tech
+tags:
+  - energyplus
+  - eplusr
+---
+
+# Zone HVAC Design Objects
+
+1. Set design specifications of outdoor air
+2. Set zone, system and plant sizing parameters
+
+# Zone HVAC Controls and Thermostats
+
+1. Set zone thermostats
+
+# Zone HVAC Forced Air Units
+
+1. Zone HVAC components here should directly correct to zones and cannot connect
+to Zone HVAC Air Loop Terminal Units.
+
+# Zone HVAC Radiative/Convective Units
+
+1. Components here do not use normal zone thermostats but use their own schedule
+to set zone setpoints
+
+# Zone HVAC Air Loop Terminal Units
+
+1. Components here are just used to distribute air flow to zones and can be used
+together with other coils.
