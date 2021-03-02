@@ -1,0 +1,76 @@
+---
+date: "2021-01-21T00:00:00+08:00"
+external_link: ""
+image:
+  caption: Overview of eplusr-docker
+  focal_point: Smart
+slides: ""
+summary: Dockerfiles for working with EnergyPlus and R
+tags:
+- Building Enegy Simulation
+- Software Development
+- EnergyPlus
+- R
+title: "eplusr-docker: Dockerfiles for working with EnergyPlus and R"
+url_code: "https://github.com/hongyuanjia/eplusr-docker"
+url_pdf: ""
+url_slides: ""
+url_video: ""
+link-citations: true
+bibliography: references.bib
+---
+
+There are summarized two major components to successful reproducible research
+[@Peng2015] : (1) data, i.e. the availability of raw data from the experiment,
+and (2) code, i.e. the availability of the statistical code and documentation
+to reproduce the results.
+In the context of Building Energy Simulation (BES), these two component will be
+(1) the building energy models and (2) the code to perform simulations and
+following data-driven analytics.
+However, the complex and rapidly changing nature of computer environments
+makes it immensely challenging to reproduce the same workflow and results even
+with the original data and code are available.
+
+eplusr-docker project aims to address this issue.
+It provides infrastructures to bring portable and reusable computational
+environments to facilitate reproducible BES applications.
+It based on the Docker containerization technology, which captures the full
+software stack, including all software dependencies in a portable and reusable
+image.
+
+[Docker](https://www.docker.com/) [@Merkel2014] is a popular open-source tool
+for containerization and has shown its potential to improve computational
+reproducibility [@Boettiger2015; @Nust2020].
+The [Rocker](https://www.rocker-project.org/) Project was launched in 2014 as a
+collaboration to provide high-quality Docker images containing the R
+environment and has seen both considerable uptakes in the R community and
+substantial development and evolution [@Boettiger2017].
+eplusr-docker is built upon the
+[`rocker/verse`](https://hub.docker.com/r/rocker/verse) images.
+It contains four groups of toolchains needed for common BES and data-driven
+analytics workflows using the [eplusr](/en/project/eplusr) framework:
+
+1. Statistical computing environment, including the latest R environment and
+   [RStudio Server](https://rstudio.com/products/rstudio/#rstudio-server), a
+   web-based integrated development environment for R programming
+1. BES engine, including [EnergyPlus](https://energyplus.net) of specified
+   version and the [eplusr R package](https://cran.r-project.org/package=eplusr)
+1. Data analytics toolkits, including a collection of
+   [tidyverse](https://www.tidyverse.org/) [@Wickham2019] R packages for data
+   import, tidying, manipulation, visualization and programming
+1. Literate programming environment, including [R
+   Markdown](https://rmarkdown.rstudio.com/) related packages for dynamic
+   document generation
+
+The source files of Docker configuration were written in several text files
+so-called [Dockerfiles](https://docs.docker.com/engine/reference/builder/) and
+are publicly available and hosted via [GitHub](GitHub Repository:
+https://github.com/hongyuanjia/eplusr-docker).
+Further evolutions can be taken to make the computational environment tailored
+to different audiences and use purposes. The docker approach is suited for
+moving between local and cloud platforms when a web-based integrated
+development environment is available, such as [RStudio
+Server](https://rstudio.com/products/rstudio/#rstudio-server) [@Boettiger2015],
+providing the scalability potential for large cloud-based BES computation.
+
+### References

@@ -1,0 +1,19 @@
+# Theme metadata
+name = "hongyuan"
+
+# Is theme light or dark?
+light = true
+
+# Primary
+primary = "#06805E"
+
+# Menu
+menu_primary = "#FAFAFA"
+menu_text = "#172A3A"
+menu_text_active = "#06805E"
+menu_title = "#172A3A"
+
+# Backgrounds
+background = "#FAFAFA"
+home_section_odd = "#FAFAFA"
+home_section_even = "#FAFAFA"
