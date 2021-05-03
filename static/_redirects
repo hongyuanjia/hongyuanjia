@@ -1,2 +1,4 @@
 https://hongyuanjia.netlify.com/*  https://hongyuanjia.name/:splat  301!
 http://hongyuanjia.netlify.com/*   https://hongyuanjia.name/:splat  301!
+
+/eplusr/*    https://hongyuanjia.github.io/eplusr/:splat
